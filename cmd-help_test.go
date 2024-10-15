@@ -15,7 +15,6 @@ Usage:
 help: Displays a help message
 exit: Exit the Pokedex
 `
-
 	cmdHelp(&w)
 	got := w.String()
 	if got != want {

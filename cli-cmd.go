@@ -1,9 +1,7 @@
 package main
 
 import (
-	"errors"
 	"io"
-	"strings"
 )
 
 type cliCmd struct {
@@ -25,20 +23,4 @@ func cliCommands() map[string]cliCmd {
 			callback:    cmdExit,
 		},
 	}
-}
-
-func execCommand(cmd string, w io.Writer) error {
-	cmd = normalizeCmd(cmd)
-	cmds := cliCommands()
-	if _, ok := cmds[cmd]; !ok {
-		return errors.New("invalid command")
-	}
-	cmds[cmd].callback(w)
-	return nil
-}
-
-func normalizeCmd(cmd string) string {
-	cmd = strings.ToLower(cmd)
-	cmd = strings.Fields(cmd)[0]
-	return cmd
 }

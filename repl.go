@@ -4,17 +4,34 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"strings"
 )
 
 func startRepl(r io.Reader, w io.Writer) {
 	scanner := bufio.NewScanner(r)
 	for {
-		fmt.Fprintln(w)
-		fmt.Fprint(w, "pokedex > ")
+		printPrompt(w)
 		scanner.Scan()
-		cmd := scanner.Text()
-		if err := execCommand(cmd, w); err != nil {
-			fmt.Fprintln(w, err)
-		}
+		execCommand(scanner.Text(), w)
 	}
+}
+
+func printPrompt(w io.Writer) {
+	fmt.Fprintln(w)
+	fmt.Fprint(w, "pokedex > ")
+}
+
+func execCommand(cmd string, w io.Writer) {
+	cmd = normalizeCmd(cmd)
+	cmds := cliCommands()
+	if _, ok := cmds[cmd]; !ok {
+		fmt.Fprintln(w, "invalid command")
+	}
+	cmds[cmd].callback(w)
+}
+
+func normalizeCmd(cmd string) string {
+	cmd = strings.ToLower(cmd)
+	cmd = strings.Fields(cmd)[0]
+	return cmd
 }
