@@ -12,8 +12,9 @@ Welcome to Pokedex
 
 Usage:
 
-help: Displays a help message
 exit: Exit the Pokedex
+help: Displays a help message
+map: Get a map
 `
 	cmdHelp(&w)
 	got := w.String()

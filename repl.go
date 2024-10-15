@@ -26,8 +26,9 @@ func execCommand(cmd string, w io.Writer) {
 	cmds := cliCommands()
 	if _, ok := cmds[cmd]; !ok {
 		fmt.Fprintln(w, "invalid command")
+	} else {
+		cmds[cmd].callback(w)
 	}
-	cmds[cmd].callback(w)
 }
 
 func normalizeCmd(cmd string) string {

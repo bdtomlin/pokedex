@@ -31,6 +31,17 @@ func TestExecCmd(t *testing.T) {
 	}
 }
 
+func TestExecCmdInvalid(t *testing.T) {
+	var w bytes.Buffer
+	want := "invalid command\n"
+	execCommand("invalidcmd", &w)
+	got := w.String()
+
+	if got != want {
+		t.Fatalf("Expected: %s, Got: %s", want, got)
+	}
+}
+
 func TestPrintPrompt(t *testing.T) {
 	var w bytes.Buffer
 	printPrompt(&w)
