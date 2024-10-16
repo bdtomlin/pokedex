@@ -3,7 +3,7 @@ package main
 type cliCmd struct {
 	name        string
 	description string
-	callback    func(pd *pokedex) error
+	callback    func(cfg *config) error
 }
 
 func cliCommands() map[string]cliCmd {
@@ -27,6 +27,11 @@ func cliCommands() map[string]cliCmd {
 			name:        "mapb",
 			description: "Get previous map",
 			callback:    cmdMapb,
+		},
+		"cache": {
+			name:        "cache",
+			description: "Show the cache",
+			callback:    cmdCache,
 		},
 	}
 }

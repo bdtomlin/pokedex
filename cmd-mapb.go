@@ -7,24 +7,22 @@ import (
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
 
-func cmdMapb(pd *pokedex) error {
-	url := pd.Url
-	if pd.Previous == "" {
+func cmdMapb(cfg *config) error {
+	if cfg.Previous == "" {
 		return errors.New("There is no previous map")
 	}
 
-	pMap, err := pokeapi.GetMap(url)
+	pMap, err := pokeapi.GetMap(cfg.Previous, cfg.Cache)
 	if err != nil {
 		return err
 	}
 
-	pd.Next = pMap.Next
-	pd.Previous = pMap.Previous
-	fmt.Fprintf(pd.output, "%+v", pMap)
+	cfg.Next = pMap.Next
+	cfg.Previous = pMap.Previous
 	for _, result := range pMap.Results {
-		fmt.Fprintln(pd.output, result.Name)
+		fmt.Fprintln(cfg.output, result.Name)
 	}
-	fmt.Fprintln(pd.output, "Previous", pd.Previous)
-	fmt.Fprintln(pd.output, "Next", pd.Next)
+	fmt.Fprintln(cfg.output, "Previous", cfg.Previous)
+	fmt.Fprintln(cfg.output, "Next", cfg.Next)
 	return nil
 }

@@ -6,12 +6,12 @@ import (
 	"strings"
 )
 
-func cmdHelp(pd *pokedex) error {
-	fmt.Fprintln(pd.output)
-	fmt.Fprintln(pd.output, "Welcome to Pokedex")
-	fmt.Fprintln(pd.output)
-	fmt.Fprintln(pd.output, "Usage:")
-	fmt.Fprintln(pd.output)
+func cmdHelp(cfg *config) error {
+	fmt.Fprintln(cfg.output)
+	fmt.Fprintln(cfg.output, "Welcome to Pokedex")
+	fmt.Fprintln(cfg.output)
+	fmt.Fprintln(cfg.output, "Usage:")
+	fmt.Fprintln(cfg.output)
 
 	cmdSl := [][]string{}
 	for _, cmd := range cliCommands() {
@@ -22,7 +22,7 @@ func cmdHelp(pd *pokedex) error {
 		return strings.Compare(strings.ToLower(a[0]), strings.ToLower(b[0]))
 	})
 	for _, cmd := range cmdSl {
-		fmt.Fprintf(pd.output, "%s: %s\n", cmd[0], cmd[1])
+		fmt.Fprintf(cfg.output, "%s: %s\n", cmd[0], cmd[1])
 	}
 	return nil
 }

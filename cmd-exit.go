@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-func cmdExit(pd *pokedex) error {
-	fmt.Fprintln(pd.output, "Exiting Pokedex")
+func cmdExit(cfg *config) error {
+	fmt.Fprintln(cfg.output, "Exiting Pokedex")
 	if flag.Lookup("test.v") == nil {
 		os.Exit(0)
 	}

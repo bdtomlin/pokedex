@@ -6,34 +6,40 @@ import (
 	"strings"
 )
 
-func startRepl(pd *pokedex) {
-	scanner := bufio.NewScanner(pd.input)
+func startRepl(cfg *config) {
+	scanner := bufio.NewScanner(cfg.input)
 	for {
-		printPrompt(pd)
+		printPrompt(cfg)
 		scanner.Scan()
-		execCommand(scanner.Text(), pd)
+		execCommand(scanner.Text(), cfg)
 	}
 }
 
-func printPrompt(pd *pokedex) {
-	fmt.Fprintln(pd.output)
-	fmt.Fprint(pd.output, "pokedex > ")
+func printPrompt(cfg *config) {
+	fmt.Fprintln(cfg.output)
+	fmt.Fprint(cfg.output, "pokedex > ")
 }
 
-func execCommand(cmd string, pd *pokedex) {
+func execCommand(cmd string, cfg *config) {
 	cmd = normalizeCmd(cmd)
+	if cmd == "" {
+		fmt.Fprintln(cfg.output)
+	}
 	cmds := cliCommands()
 	if _, ok := cmds[cmd]; !ok {
-		fmt.Fprintln(pd.output, "invalid command")
+		fmt.Fprintln(cfg.output, "invalid command")
 	} else {
-		if err := cmds[cmd].callback(pd); err != nil {
-			fmt.Fprintf(pd.output, "Error with command '%s': %s", cmd, err.Error())
+		if err := cmds[cmd].callback(cfg); err != nil {
+			fmt.Fprintf(cfg.output, "Error with command '%s': %s", cmd, err.Error())
 		}
 	}
 }
 
 func normalizeCmd(cmd string) string {
 	cmd = strings.ToLower(cmd)
-	cmd = strings.Fields(cmd)[0]
+	split := strings.Fields(cmd)
+	if len(split) > 0 {
+		cmd = split[0]
+	}
 	return cmd
 }

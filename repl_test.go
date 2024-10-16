@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"os"
 	"testing"
+
+	"github.com/bdtomlin/pokedexcli/internal/pokecache"
 )
 
 func TestNormalizeCmd(t *testing.T) {
@@ -23,9 +25,9 @@ func TestNormalizeCmd(t *testing.T) {
 
 func TestExecCmd(t *testing.T) {
 	var w bytes.Buffer
-	pd := newPokedex(os.Stdin, &w)
+	cfg := newConfig(os.Stdin, &w, pokecache.NewCache())
 	want := "Exiting Pokedex\n"
-	execCommand("exit", &pd)
+	execCommand("exit", cfg)
 	got := w.String()
 
 	if got != want {
@@ -35,9 +37,21 @@ func TestExecCmd(t *testing.T) {
 
 func TestExecCmdInvalid(t *testing.T) {
 	var w bytes.Buffer
-	pd := newPokedex(os.Stdin, &w)
+	cfg := newConfig(os.Stdin, &w, pokecache.NewCache())
 	want := "invalid command\n"
-	execCommand("invalidcmd", &pd)
+	execCommand("invalidcmd", cfg)
+	got := w.String()
+
+	if got != want {
+		t.Fatalf("Expected: %s, Got: %s", want, got)
+	}
+}
+
+func TestExecCmdBlank(t *testing.T) {
+	var w bytes.Buffer
+	cfg := newConfig(os.Stdin, &w, pokecache.NewCache())
+	want := "\ninvalid command\n"
+	execCommand("", cfg)
 	got := w.String()
 
 	if got != want {
@@ -47,8 +61,8 @@ func TestExecCmdInvalid(t *testing.T) {
 
 func TestPrintPrompt(t *testing.T) {
 	var w bytes.Buffer
-	pd := newPokedex(os.Stdin, &w)
-	printPrompt(&pd)
+	cfg := newConfig(os.Stdin, &w, pokecache.NewCache())
+	printPrompt(cfg)
 
 	want := "\npokedex > "
 	got := w.String()

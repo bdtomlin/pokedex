@@ -1,8 +1,13 @@
 package main
 
-import "os"
+import (
+	"os"
+	"time"
+
+	"github.com/bdtomlin/pokedexcli/internal/pokecache"
+)
 
 func main() {
-	pd := newPokedex(os.Stdin, os.Stdout)
-	startRepl(&pd)
+	config := newConfig(os.Stdin, os.Stdout, pokecache.NewCache(10*time.Second))
+	startRepl(config)
 }

@@ -2,29 +2,32 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
 
-func cmdMap(pd *pokedex) error {
-	url := pd.Url
-	if pd.Next != "" {
-		url = pd.Next
+func cmdMap(cfg *config) error {
+	url := cfg.Url
+	if cfg.Next != "" {
+		url = cfg.Next
 	}
 
-	pMap, err := pokeapi.GetMap(url)
+	t0 := time.Now()
+	pMap, err := pokeapi.GetMap(url, cfg.Cache)
 	if err != nil {
 		return err
 	}
 
-	pd.Next = pMap.Next
-	pd.Previous = pMap.Previous
-	fmt.Fprintf(pd.output, "%+v", pMap)
+	cfg.Next = pMap.Next
+	cfg.Previous = pMap.Previous
 	for _, result := range pMap.Results {
-		fmt.Fprintln(pd.output, result.Name)
+		fmt.Fprintln(cfg.output, result.Name)
 	}
-	fmt.Fprintln(pd.output)
-	fmt.Fprintln(pd.output, "Previous", pd.Previous)
-	fmt.Fprintln(pd.output, "Next", pd.Next)
+	fmt.Fprintln(cfg.output)
+	fmt.Fprintln(cfg.output, "Previous", cfg.Previous)
+	fmt.Fprintln(cfg.output, "Next", cfg.Next)
+	t1 := time.Now()
+	fmt.Printf("The call took %v to run.\n", t1.Sub(t0))
 	return nil
 }

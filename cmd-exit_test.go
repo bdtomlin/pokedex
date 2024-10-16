@@ -4,14 +4,16 @@ import (
 	"bytes"
 	"os"
 	"testing"
+
+	"github.com/bdtomlin/pokedexcli/internal/pokecache"
 )
 
 func TestCmdExit(t *testing.T) {
 	var w bytes.Buffer
 	want := "Exiting Pokedex\n"
-	pd := newPokedex(os.Stdin, &w)
+	config := newConfig(os.Stdin, &w, pokecache.NewCache())
 
-	cmdExit(&pd)
+	cmdExit(config)
 	got := w.String()
 
 	if got != want {

@@ -3,22 +3,24 @@ package main
 import (
 	"bytes"
 	"testing"
+
+	"github.com/bdtomlin/pokedexcli/internal/pokecache"
 )
 
-func TestNewPokedex(t *testing.T) {
+func TestNewConfig(t *testing.T) {
 	var r bytes.Buffer
 	var w bytes.Buffer
-	pd := newPokedex(&r, &w)
-	if pd.input != &r {
+	cfg := newConfig(&r, &w, pokecache.NewCache())
+	if cfg.input != &r {
 		t.Fatalf("Expected reader passed in to be in struct")
 	}
-	if pd.output != &w {
+	if cfg.output != &w {
 		t.Fatalf("Expected writer passed in to be in struct")
 	}
-	if pd.Next != "" {
+	if cfg.Next != "" {
 		t.Fatalf("Expected Next to be a blank string")
 	}
-	if pd.Previous != "" {
+	if cfg.Previous != "" {
 		t.Fatalf("Expected Previous to be a blank string")
 	}
 }

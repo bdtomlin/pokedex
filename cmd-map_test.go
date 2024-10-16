@@ -4,5 +4,5 @@ import (
 	"testing"
 )
 
-func TestCmdMap(t *testing.T) {
+func TestCmdMapb(t *testing.T) {
 }
