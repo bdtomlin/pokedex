@@ -2,17 +2,16 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"slices"
 	"strings"
 )
 
-func cmdHelp(w io.Writer) error {
-	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Welcome to Pokedex")
-	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Usage:")
-	fmt.Fprintln(w)
+func cmdHelp(pd *pokedex) error {
+	fmt.Fprintln(pd.output)
+	fmt.Fprintln(pd.output, "Welcome to Pokedex")
+	fmt.Fprintln(pd.output)
+	fmt.Fprintln(pd.output, "Usage:")
+	fmt.Fprintln(pd.output)
 
 	cmdSl := [][]string{}
 	for _, cmd := range cliCommands() {
@@ -23,7 +22,7 @@ func cmdHelp(w io.Writer) error {
 		return strings.Compare(strings.ToLower(a[0]), strings.ToLower(b[0]))
 	})
 	for _, cmd := range cmdSl {
-		fmt.Fprintf(w, "%s: %s\n", cmd[0], cmd[1])
+		fmt.Fprintf(pd.output, "%s: %s\n", cmd[0], cmd[1])
 	}
 	return nil
 }

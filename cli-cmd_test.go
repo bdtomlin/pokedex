@@ -18,6 +18,18 @@ func TestCliCommands(t *testing.T) {
 			"description": "Exit the Pokedex",
 			"cmd":         cmdExit,
 		},
+		{
+			"key":         "map",
+			"name":        "map",
+			"description": "Get a map",
+			"cmd":         cmdMap,
+		},
+		{
+			"key":         "mapb",
+			"name":        "mapb",
+			"description": "Get previous map",
+			"cmd":         cmdMapb,
+		},
 	}
 
 	cmds := cliCommands()

@@ -3,12 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io"
 	"os"
 )
 
-func cmdExit(w io.Writer) error {
-	fmt.Fprintln(w, "Exiting Pokedex")
+func cmdExit(pd *pokedex) error {
+	fmt.Fprintln(pd.output, "Exiting Pokedex")
 	if flag.Lookup("test.v") == nil {
 		os.Exit(0)
 	}

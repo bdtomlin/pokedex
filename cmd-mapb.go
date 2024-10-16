@@ -1,15 +1,16 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
 
-func cmdMap(pd *pokedex) error {
+func cmdMapb(pd *pokedex) error {
 	url := pd.Url
-	if pd.Next != "" {
-		url = pd.Next
+	if pd.Previous == "" {
+		return errors.New("There is no previous map")
 	}
 
 	pMap, err := pokeapi.GetMap(url)
@@ -23,7 +24,6 @@ func cmdMap(pd *pokedex) error {
 	for _, result := range pMap.Results {
 		fmt.Fprintln(pd.output, result.Name)
 	}
-	fmt.Fprintln(pd.output)
 	fmt.Fprintln(pd.output, "Previous", pd.Previous)
 	fmt.Fprintln(pd.output, "Next", pd.Next)
 	return nil

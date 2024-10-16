@@ -1,13 +1,9 @@
 package main
 
-import (
-	"io"
-)
-
 type cliCmd struct {
 	name        string
 	description string
-	callback    func(w io.Writer) error
+	callback    func(pd *pokedex) error
 }
 
 func cliCommands() map[string]cliCmd {
@@ -26,6 +22,11 @@ func cliCommands() map[string]cliCmd {
 			name:        "map",
 			description: "Get a map",
 			callback:    cmdMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Get previous map",
+			callback:    cmdMapb,
 		},
 	}
 }

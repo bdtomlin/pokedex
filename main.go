@@ -3,5 +3,6 @@ package main
 import "os"
 
 func main() {
-	startRepl(os.Stdin, os.Stdout)
+	pd := newPokedex(os.Stdin, os.Stdout)
+	startRepl(&pd)
 }

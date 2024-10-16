@@ -3,31 +3,32 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io"
 	"strings"
 )
 
-func startRepl(r io.Reader, w io.Writer) {
-	scanner := bufio.NewScanner(r)
+func startRepl(pd *pokedex) {
+	scanner := bufio.NewScanner(pd.input)
 	for {
-		printPrompt(w)
+		printPrompt(pd)
 		scanner.Scan()
-		execCommand(scanner.Text(), w)
+		execCommand(scanner.Text(), pd)
 	}
 }
 
-func printPrompt(w io.Writer) {
-	fmt.Fprintln(w)
-	fmt.Fprint(w, "pokedex > ")
+func printPrompt(pd *pokedex) {
+	fmt.Fprintln(pd.output)
+	fmt.Fprint(pd.output, "pokedex > ")
 }
 
-func execCommand(cmd string, w io.Writer) {
+func execCommand(cmd string, pd *pokedex) {
 	cmd = normalizeCmd(cmd)
 	cmds := cliCommands()
 	if _, ok := cmds[cmd]; !ok {
-		fmt.Fprintln(w, "invalid command")
+		fmt.Fprintln(pd.output, "invalid command")
 	} else {
-		cmds[cmd].callback(w)
+		if err := cmds[cmd].callback(pd); err != nil {
+			fmt.Fprintf(pd.output, "Error with command '%s': %s", cmd, err.Error())
+		}
 	}
 }
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"os"
 	"testing"
 )
 
@@ -15,8 +16,10 @@ Usage:
 exit: Exit the Pokedex
 help: Displays a help message
 map: Get a map
+mapb: Get previous map
 `
-	cmdHelp(&w)
+	pd := newPokedex(os.Stdin, &w)
+	cmdHelp(&pd)
 	got := w.String()
 	if got != want {
 		t.Fatalf("Expected: %s, Got: %s", want, got)

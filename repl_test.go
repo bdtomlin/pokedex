@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"os"
 	"testing"
 )
 
@@ -22,8 +23,9 @@ func TestNormalizeCmd(t *testing.T) {
 
 func TestExecCmd(t *testing.T) {
 	var w bytes.Buffer
+	pd := newPokedex(os.Stdin, &w)
 	want := "Exiting Pokedex\n"
-	execCommand("exit", &w)
+	execCommand("exit", &pd)
 	got := w.String()
 
 	if got != want {
@@ -33,8 +35,9 @@ func TestExecCmd(t *testing.T) {
 
 func TestExecCmdInvalid(t *testing.T) {
 	var w bytes.Buffer
+	pd := newPokedex(os.Stdin, &w)
 	want := "invalid command\n"
-	execCommand("invalidcmd", &w)
+	execCommand("invalidcmd", &pd)
 	got := w.String()
 
 	if got != want {
@@ -44,7 +47,8 @@ func TestExecCmdInvalid(t *testing.T) {
 
 func TestPrintPrompt(t *testing.T) {
 	var w bytes.Buffer
-	printPrompt(&w)
+	pd := newPokedex(os.Stdin, &w)
+	printPrompt(&pd)
 
 	want := "\npokedex > "
 	got := w.String()
