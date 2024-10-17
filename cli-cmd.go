@@ -33,6 +33,11 @@ func cliCommands() map[string]cliCmd {
 			description: "Display a help message",
 			callback:    cmdHelp,
 		},
+		"inspect": {
+			name:        "inspect",
+			description: "Inspect your pokemon",
+			callback:    cmdInspect,
+		},
 		"map": {
 			name:        "map",
 			description: "Get a map",

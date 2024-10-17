@@ -6,9 +6,21 @@ import (
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
 
-type Pokemon struct {
-	Name           string
-	BaseExperience int
+type Stats []struct {
+	BaseStat int
+	Effort   int
+	Stat     struct {
+		Name string
+		URL  string
+	}
+}
+
+type Types []struct {
+	Slot int
+	Type struct {
+		Name string
+		URL  string
+	}
 }
 
 type config struct {
@@ -17,7 +29,7 @@ type config struct {
 	Next     string
 	Previous string
 	PokeApi  *pokeapi.PokeApi
-	Caught   []Pokemon
+	Caught   map[string]pokeapi.Pokemon
 }
 
 func newConfig(input io.Reader, output io.Writer, pokeApi *pokeapi.PokeApi) *config {
@@ -25,6 +37,6 @@ func newConfig(input io.Reader, output io.Writer, pokeApi *pokeapi.PokeApi) *con
 		input:   input,
 		output:  output,
 		PokeApi: pokeApi,
-		Caught:  []Pokemon{},
+		Caught:  map[string]pokeapi.Pokemon{},
 	}
 }

@@ -112,7 +112,6 @@ func (pApi *PokeApi) GetPokemon(name string) (Pokemon, error) {
 	defer logResponseTime(time.Now())
 	url := fullUrl("pokemon", name)
 	var pok Pokemon
-	fmt.Println(url)
 
 	data, ok := pApi.readDataFromCache(url)
 	if !ok {
@@ -152,6 +151,7 @@ func (pApi *PokeApi) readDataFromCache(url string) ([](byte), bool) {
 }
 
 func readDataFromApi(url string) ([](byte), error) {
+	fmt.Println("Requesting:", url)
 	var data []byte
 
 	res, err := http.Get(url)
