@@ -48,5 +48,10 @@ func cliCommands() map[string]cliCmd {
 			description: "Get previous map",
 			callback:    cmdMapb,
 		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "Show your Pokedex",
+			callback:    cmdPokedex,
+		},
 	}
 }
