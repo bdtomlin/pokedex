@@ -34,9 +34,12 @@ func NewCache(duration ...time.Duration) *Cache {
 func (c *Cache) Add(key string, val []byte) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	c.entries[key] = cacheEntry{
-		createdAt: time.Now(),
-		val:       val,
+	_, ok := c.entries[key]
+	if !ok {
+		c.entries[key] = cacheEntry{
+			createdAt: time.Now(),
+			val:       val,
+		}
 	}
 }
 
@@ -48,6 +51,14 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 		return entry.val, true
 	}
 	return nil, false
+}
+
+func (c *Cache) Dump() string {
+	var b strings.Builder
+	for k, entry := range c.entries {
+		fmt.Fprintf(&b, "[%s: [createdAt: %v, val: ...]\n", k, entry.createdAt)
+	}
+	return b.String()
 }
 
 func (c *Cache) reapLoop(duration time.Duration, ch chan any) {
@@ -76,12 +87,4 @@ func (c *Cache) prune(duration time.Duration, ch chan any) {
 			c.mu.Unlock()
 		}
 	}
-}
-
-func (c *Cache) Dump() string {
-	var b strings.Builder
-	for k, entry := range c.entries {
-		fmt.Fprintf(&b, "[%s: [createdAt: %v, val: ...]", k, entry.createdAt)
-	}
-	return b.String()
 }

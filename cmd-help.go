@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func cmdHelp(cfg *config) error {
+func cmdHelp(cfg *config, args ...string) error {
 	fmt.Fprintln(cfg.output)
 	fmt.Fprintln(cfg.output, "Welcome to Pokedex")
 	fmt.Fprintln(cfg.output)

@@ -3,23 +3,28 @@ package main
 import (
 	"io"
 
-	"github.com/bdtomlin/pokedexcli/internal/pokecache"
+	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
+
+type Pokemon struct {
+	Name           string
+	BaseExperience int
+}
 
 type config struct {
 	input    io.Reader
 	output   io.Writer
-	Url      string
 	Next     string
 	Previous string
-	Cache    *pokecache.Cache
+	PokeApi  *pokeapi.PokeApi
+	Caught   []Pokemon
 }
 
-func newConfig(input io.Reader, output io.Writer, cache *pokecache.Cache) *config {
+func newConfig(input io.Reader, output io.Writer, pokeApi *pokeapi.PokeApi) *config {
 	return &config{
-		input:  input,
-		output: output,
-		Url:    "https://pokeapi.co/api/v2/location-area",
-		Cache:  cache,
+		input:   input,
+		output:  output,
+		PokeApi: pokeApi,
+		Caught:  []Pokemon{},
 	}
 }

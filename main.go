@@ -2,12 +2,14 @@ package main
 
 import (
 	"os"
-	"time"
 
+	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 	"github.com/bdtomlin/pokedexcli/internal/pokecache"
 )
 
 func main() {
-	config := newConfig(os.Stdin, os.Stdout, pokecache.NewCache(10*time.Second))
+	cache := pokecache.NewCache()
+	pokeApi := pokeapi.NewPokeApi(cache)
+	config := newConfig(os.Stdin, os.Stdout, pokeApi)
 	startRepl(config)
 }

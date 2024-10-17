@@ -21,7 +21,7 @@ func printPrompt(cfg *config) {
 }
 
 func execCommand(cmd string, cfg *config) {
-	cmd = normalizeCmd(cmd)
+	cmd, args := normalizeCmd(cmd)
 	if cmd == "" {
 		fmt.Fprintln(cfg.output)
 	}
@@ -29,17 +29,19 @@ func execCommand(cmd string, cfg *config) {
 	if _, ok := cmds[cmd]; !ok {
 		fmt.Fprintln(cfg.output, "invalid command")
 	} else {
-		if err := cmds[cmd].callback(cfg); err != nil {
+		if err := cmds[cmd].callback(cfg, args...); err != nil {
 			fmt.Fprintf(cfg.output, "Error with command '%s': %s", cmd, err.Error())
 		}
 	}
 }
 
-func normalizeCmd(cmd string) string {
+func normalizeCmd(cmd string) (string, []string) {
 	cmd = strings.ToLower(cmd)
 	split := strings.Fields(cmd)
+	var args []string
 	if len(split) > 0 {
 		cmd = split[0]
+		args = split[1:]
 	}
-	return cmd
+	return cmd, args
 }

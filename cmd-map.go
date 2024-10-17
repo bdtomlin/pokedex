@@ -2,19 +2,15 @@ package main
 
 import (
 	"fmt"
-	"time"
-
-	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
 
-func cmdMap(cfg *config) error {
-	url := cfg.Url
+func cmdMap(cfg *config, args ...string) error {
+	path := ""
 	if cfg.Next != "" {
-		url = cfg.Next
+		path = cfg.Next
 	}
 
-	t0 := time.Now()
-	pMap, err := pokeapi.GetMap(url, cfg.Cache)
+	pMap, err := cfg.PokeApi.GetMap(path)
 	if err != nil {
 		return err
 	}
@@ -27,7 +23,5 @@ func cmdMap(cfg *config) error {
 	fmt.Fprintln(cfg.output)
 	fmt.Fprintln(cfg.output, "Previous", cfg.Previous)
 	fmt.Fprintln(cfg.output, "Next", cfg.Next)
-	t1 := time.Now()
-	fmt.Printf("The call took %v to run.\n", t1.Sub(t0))
 	return nil
 }

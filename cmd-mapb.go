@@ -3,16 +3,14 @@ package main
 import (
 	"errors"
 	"fmt"
-
-	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
 
-func cmdMapb(cfg *config) error {
+func cmdMapb(cfg *config, args ...string) error {
 	if cfg.Previous == "" {
 		return errors.New("There is no previous map")
 	}
 
-	pMap, err := pokeapi.GetMap(cfg.Previous, cfg.Cache)
+	pMap, err := cfg.PokeApi.GetMap(cfg.Previous)
 	if err != nil {
 		return err
 	}

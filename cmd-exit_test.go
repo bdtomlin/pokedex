@@ -5,13 +5,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bdtomlin/pokedexcli/internal/pokecache"
+	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
 
 func TestCmdExit(t *testing.T) {
 	var w bytes.Buffer
 	want := "Exiting Pokedex\n"
-	config := newConfig(os.Stdin, &w, pokecache.NewCache())
+	config := newConfig(os.Stdin, &w, pokeapi.NewPokeApi())
 
 	cmdExit(config)
 	got := w.String()

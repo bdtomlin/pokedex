@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func cmdCache(cfg *config) error {
-	fmt.Fprintln(cfg.output, cfg.Cache.Dump())
+func cmdCache(cfg *config, args ...string) error {
+	fmt.Fprintln(cfg.output, cfg.PokeApi.Cache.Dump())
 	return nil
 }

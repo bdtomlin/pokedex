@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/bdtomlin/pokedexcli/internal/pokecache"
+	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
 
 func TestNewConfig(t *testing.T) {
 	var r bytes.Buffer
 	var w bytes.Buffer
-	cfg := newConfig(&r, &w, pokecache.NewCache())
+	cfg := newConfig(&r, &w, pokeapi.NewPokeApi())
 	if cfg.input != &r {
 		t.Fatalf("Expected reader passed in to be in struct")
 	}
