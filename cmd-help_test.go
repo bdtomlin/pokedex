@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"testing"
 
@@ -15,14 +16,12 @@ Welcome to Pokedex
 
 Usage:
 
-cache: Show the cache
-catch: Try to catch a pokemon
-exit: Exit the Pokedex
-explore: Explore a location
-help: Display a help message
-map: Get a map
-mapb: Get previous map
 `
+	appendSortedCmds := func(key string, cmd cliCmd) {
+		want += fmt.Sprintf("%s: %s\n", key, cmd.description)
+	}
+	applyToSortedCmds(appendSortedCmds)
+
 	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi())
 	cmdHelp(cfg)
 	got := w.String()

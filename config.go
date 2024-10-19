@@ -24,19 +24,23 @@ type Types []struct {
 }
 
 type config struct {
-	input    io.Reader
-	output   io.Writer
-	Next     string
-	Previous string
-	PokeApi  *pokeapi.PokeApi
-	Caught   map[string]pokeapi.Pokemon
+	input              io.Reader
+	output             io.Writer
+	Next               string
+	Previous           string
+	PokeApi            *pokeapi.PokeApi
+	Caught             map[string]pokeapi.Pokemon
+	testing            bool
+	testingRandSuccess bool
 }
 
 func newConfig(input io.Reader, output io.Writer, pokeApi *pokeapi.PokeApi) *config {
 	return &config{
-		input:   input,
-		output:  output,
-		PokeApi: pokeApi,
-		Caught:  map[string]pokeapi.Pokemon{},
+		input:              input,
+		output:             output,
+		PokeApi:            pokeApi,
+		Caught:             map[string]pokeapi.Pokemon{},
+		testing:            false,
+		testingRandSuccess: false,
 	}
 }

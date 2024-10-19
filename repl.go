@@ -25,7 +25,7 @@ func execCommand(cmd string, cfg *config) {
 	if cmd == "" {
 		fmt.Fprintln(cfg.output)
 	}
-	cmds := cliCommands()
+	cmds := cliCmds()
 	if _, ok := cmds[cmd]; !ok {
 		fmt.Fprintln(cfg.output, "invalid command")
 	} else {

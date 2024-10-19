@@ -1,10 +1,14 @@
 package pokeapi
 
 import (
+	"bufio"
+	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httputil"
 	"strings"
 	"time"
 )
@@ -21,18 +25,18 @@ type cache interface {
 	Dump() string
 }
 
-type nullCache struct{}
+type NullCache struct{}
 
-func (nc nullCache) Add(s string, b []byte)      {}
-func (nc nullCache) Get(s string) ([]byte, bool) { return []byte{}, false }
-func (nc nullCache) Dump() string                { return "nullCache" }
+func (nc NullCache) Add(s string, b []byte)      {}
+func (nc NullCache) Get(s string) ([]byte, bool) { return []byte{}, false }
+func (nc NullCache) Dump() string                { return "nullCache" }
 
 func NewPokeApi(maybeCache ...cache) *PokeApi {
 	var cache cache
 	if len(maybeCache) == 1 {
 		cache = maybeCache[0]
 	} else {
-		cache = nullCache{}
+		cache = NullCache{}
 	}
 	return &PokeApi{
 		Cache: cache,
@@ -68,21 +72,16 @@ func (pApi *PokeApi) GetMap(url string) (PokeMap, error) {
 		url = "/location-area"
 	}
 	url = normalizeUrlOrPath(url)
-
 	var pMap PokeMap
 
-	data, ok := pApi.readDataFromCache(url)
-	if !ok {
-		apiData, err := readDataFromApi(url)
-		if err != nil {
-			return pMap, err
-		}
-		data = apiData
+	data, err := pApi.fetchData(url)
+	if err != nil {
+		return pMap, err
 	}
 
-	pApi.Cache.Add(url, data)
 	if err := json.Unmarshal(data, &pMap); err != nil {
-		return pMap, fmt.Errorf("Error parsing json %w", err)
+		fmt.Println(string(data))
+		return pMap, fmt.Errorf("Error parsing json1 %w", err)
 	}
 	return pMap, nil
 }
@@ -92,18 +91,14 @@ func (pApi *PokeApi) GetLocation(area string) (LocationArea, error) {
 	url := fullUrl("location-area", area)
 	var la LocationArea
 
-	data, ok := pApi.readDataFromCache(url)
-	if !ok {
-		apiData, err := readDataFromApi(url)
-		if err != nil {
-			return la, err
-		}
-		data = apiData
+	data, err := pApi.fetchData(url)
+	if err != nil {
+		return la, err
 	}
 
-	pApi.Cache.Add(url, data)
 	if err := json.Unmarshal(data, &la); err != nil {
-		return la, fmt.Errorf("Error parsing json %w", err)
+		fmt.Println(string(data))
+		return la, fmt.Errorf("Error parsing json2 %w", err)
 	}
 	return la, nil
 }
@@ -113,20 +108,28 @@ func (pApi *PokeApi) GetPokemon(name string) (Pokemon, error) {
 	url := fullUrl("pokemon", name)
 	var pok Pokemon
 
+	data, err := pApi.fetchData(url)
+	if err != nil {
+		return pok, err
+	}
+
+	if err := json.Unmarshal(data, &pok); err != nil {
+		fmt.Println("data", string(data))
+		return pok, fmt.Errorf("Error parsing json3 %w", err)
+	}
+	return pok, nil
+}
+
+func (pApi *PokeApi) fetchData(url string) ([]byte, error) {
 	data, ok := pApi.readDataFromCache(url)
 	if !ok {
-		apiData, err := readDataFromApi(url)
+		apiData, err := pApi.readDataFromApi(url)
 		if err != nil {
-			return pok, err
+			return apiData, err
 		}
 		data = apiData
 	}
-
-	pApi.Cache.Add(url, data)
-	if err := json.Unmarshal(data, &pok); err != nil {
-		return pok, fmt.Errorf("Error parsing json %w", err)
-	}
-	return pok, nil
+	return data, nil
 }
 
 func normalizeUrlOrPath(url string) string {
@@ -143,30 +146,67 @@ func fullUrl(parts ...string) string {
 }
 
 func (pApi *PokeApi) readDataFromCache(url string) ([](byte), bool) {
-	data, ok := pApi.Cache.Get(url)
+	var data []byte
+	rawHttpRes, ok := pApi.Cache.Get(url)
 	if !ok {
 		return nil, false
+	}
+	r := bufio.NewReader(bytes.NewReader(rawHttpRes))
+	res, err := http.ReadResponse(r, &http.Request{})
+	if err != nil {
+		return data, false
+	}
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		return data, false
 	}
 	return data, true
 }
 
-func readDataFromApi(url string) ([](byte), error) {
-	fmt.Println("Requesting:", url)
+func (pApi *PokeApi) readDataFromApi(url string) ([](byte), error) {
 	var data []byte
 
 	res, err := http.Get(url)
 	if err != nil {
-		return data, fmt.Errorf("Network error: %w", err)
+		return data, fmt.Errorf("Request error: %w", err)
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode < 200 || res.StatusCode > 299 {
+	if res.StatusCode <= 599 && res.StatusCode >= 500 {
 		return data, fmt.Errorf("Http error: %s", res.Status)
 	}
 
+	dump, err := httputil.DumpResponse(res, true)
+	if err != nil {
+		return data, fmt.Errorf("Error reading response: %w", err)
+	}
+	pApi.Cache.Add(url, dump)
+
 	data, err = io.ReadAll(res.Body)
 	if err != nil {
-		return data, fmt.Errorf("Error reading response body: %w", err)
+		return data, err
+	}
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		return data, fmt.Errorf("Http error: %s", res.Status)
+	}
+	return data, nil
+}
+
+func dataFromRawHttpRes(rawRes []byte) ([]byte, error) {
+	var data []byte
+	r := bufio.NewReader(bytes.NewReader(rawRes))
+	res, err := http.ReadResponse(r, &http.Request{})
+	if err != nil {
+		return data, errors.New("error converting bytes to http response")
+	}
+	defer res.Body.Close()
+	data, err = io.ReadAll(res.Body)
+	if err != nil {
+		return data, errors.New("error reading response")
+	}
+	if res.StatusCode >= 400 && res.StatusCode <= 599 {
+		return data, errors.New(res.Status)
 	}
 	return data, nil
 }
