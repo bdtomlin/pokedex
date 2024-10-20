@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
-	"github.com/bdtomlin/pokedexcli/internal/testcache"
+	"github.com/bdtomlin/pokedexcli/internal/pokecache"
 )
 
 // This has a workaround to test randomness.
@@ -16,9 +16,8 @@ func TestCmdCatchSuccess(t *testing.T) {
 	var w bytes.Buffer
 	want := "Throwing a Pokeball at pidgey...\npidgey was caught!\n"
 
-	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(testcache.NewCache()))
-	cfg.testing = true
-	cfg.testingRandSuccess = true
+	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
+	cfg.RandIntFunc = func(i int) int { return 1 }
 	cmdCatch(cfg, "pidgey")
 	got := w.String()
 	if got != want {
@@ -30,23 +29,8 @@ func TestCmdCatchFailure(t *testing.T) {
 	var w bytes.Buffer
 	want := "Throwing a Pokeball at pidgey...\npidgey escaped!\n"
 
-	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(testcache.NewCache()))
-	cfg.testing = true
-	cfg.testingRandSuccess = false
-	cmdCatch(cfg, "pidgey")
-	got := w.String()
-	if got != want {
-		t.Fatalf("Want: %s, Got: %s", want, got)
-	}
-}
-
-func TestCmdCatchNonExistentName(t *testing.T) {
-	var w bytes.Buffer
-	want := "Throwing a Pokeball at pidgey...\npidgey escaped!\n"
-
-	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(testcache.NewCache()))
-	cfg.testing = true
-	cfg.testingRandSuccess = false
+	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
+	cfg.RandIntFunc = func(i int) int { return 0 }
 	cmdCatch(cfg, "pidgey")
 	got := w.String()
 	if got != want {
@@ -56,7 +40,23 @@ func TestCmdCatchNonExistentName(t *testing.T) {
 
 func TestCmdCatchNoName(t *testing.T) {
 	var w bytes.Buffer
-	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi())
+
+	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
+
+	err := cmdCatch(cfg, "")
+	if err == nil {
+		t.Fatalf("Want an error when the name is blank")
+	}
+
+	err = cmdCatch(cfg)
+	if err == nil {
+		t.Fatalf("Want an error when the name is blank")
+	}
+}
+
+func TestCmdCatchNonExistant(t *testing.T) {
+	var w bytes.Buffer
+	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
 	err := cmdCatch(cfg, "slkejfwerfwefjk")
 	wantError := "Not Found"
 	if err == nil {

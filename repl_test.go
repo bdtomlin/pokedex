@@ -4,10 +4,25 @@ import (
 	"bytes"
 	"os"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
+	"github.com/bdtomlin/pokedexcli/internal/pokecache"
 )
+
+func TestStartRepl(t *testing.T) {
+	stdin := strings.NewReader("exit\n")
+	var w bytes.Buffer
+	cfg := newConfig(stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
+
+	startRepl(cfg)
+	want := "pokedex > \nExiting Pokedex os.Exit(0)"
+	got := w.String()
+	if strings.Contains(want, got) {
+		t.Fatalf("Expected: %+v, Got: %+v", want, got)
+	}
+}
 
 func TestNormalizeCmd(t *testing.T) {
 	cases := []struct {
@@ -31,9 +46,9 @@ func TestNormalizeCmd(t *testing.T) {
 
 func TestExecCmd(t *testing.T) {
 	var w bytes.Buffer
-	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi())
-	want := "Exiting Pokedex\n"
-	execCommand("exit", cfg)
+	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
+	want := "Error with command 'pokedex': Your Pokedex is empty!"
+	execCommand("pokedex", cfg)
 	got := w.String()
 
 	if got != want {
@@ -43,7 +58,7 @@ func TestExecCmd(t *testing.T) {
 
 func TestExecCmdInvalid(t *testing.T) {
 	var w bytes.Buffer
-	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi())
+	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
 	want := "invalid command\n"
 	execCommand("invalidcmd", cfg)
 	got := w.String()
@@ -55,7 +70,7 @@ func TestExecCmdInvalid(t *testing.T) {
 
 func TestExecCmdBlank(t *testing.T) {
 	var w bytes.Buffer
-	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi())
+	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
 	want := "\ninvalid command\n"
 	execCommand("", cfg)
 	got := w.String()
@@ -67,7 +82,7 @@ func TestExecCmdBlank(t *testing.T) {
 
 func TestPrintPrompt(t *testing.T) {
 	var w bytes.Buffer
-	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi())
+	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
 	printPrompt(cfg)
 
 	want := "\npokedex > "

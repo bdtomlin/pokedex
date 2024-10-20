@@ -8,10 +8,10 @@ import (
 
 func startRepl(cfg *config) {
 	scanner := bufio.NewScanner(cfg.input)
-	for {
-		printPrompt(cfg)
-		scanner.Scan()
+	printPrompt(cfg)
+	for scanner.Scan() {
 		execCommand(scanner.Text(), cfg)
+		printPrompt(cfg)
 	}
 }
 

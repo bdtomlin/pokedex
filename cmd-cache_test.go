@@ -6,15 +6,15 @@ import (
 	"testing"
 
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
-	"github.com/bdtomlin/pokedexcli/internal/testcache"
+	"github.com/bdtomlin/pokedexcli/internal/pokecache"
 )
 
 func TestCmdCache(t *testing.T) {
 	var w bytes.Buffer
-	config := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(testcache.NewCache()))
+	config := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
 	cmdCache(config)
 
-	want := "this is a cache for testing\n"
+	want := "This is a cache for testing. Cache is saved in the internal/pokecache/testcache directory\n"
 	got := w.String()
 
 	if want != got {

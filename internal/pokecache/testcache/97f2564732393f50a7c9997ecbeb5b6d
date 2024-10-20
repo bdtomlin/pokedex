@@ -1,0 +1,26 @@
+HTTP/2.0 200 OK
+Accept-Ranges: bytes
+Access-Control-Allow-Origin: *
+Alt-Svc: h3=":443"; ma=86400
+Cache-Control: public, max-age=86400, s-maxage=86400
+Cf-Cache-Status: HIT
+Cf-Ray: 8d5341b1af1e6b10-DFW
+Content-Type: application/json; charset=utf-8
+Date: Sat, 19 Oct 2024 19:43:21 GMT
+Etag: W/"6e6-ltImLlidbzAGjIie9HYqgfykkrE"
+Function-Execution-Id: jti6bpoffq4y
+Nel: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+Report-To: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=39phXcDFWlu72hS%2FFGdxeOnKfHau%2Bd5u1BKRJvsRrxzOLhFgMwoaeT%2FlOxNYGotv%2FNYZ2y%2BIPGMKWa0ZHJV3IZXvE54jxnyegCS99sPt8ukNLo%2BT5I5VzjAEqVnD"}],"group":"cf-nel","max_age":604800}
+Server: cloudflare
+Server-Timing: cfL4;desc="?proto=TCP&rtt=2485&sent=13&recv=14&lost=0&retrans=0&sent_bytes=6483&recv_bytes=1870&delivery_rate=3916790&cwnd=257&unsent_bytes=0&cid=6ea40fa0823a8329&ts=125&x=0"
+Strict-Transport-Security: max-age=31556926
+Vary: Accept-Encoding,cookie,need-authorization, x-fh-requested-host, accept-encoding
+X-Cache: MISS
+X-Cache-Hits: 0
+X-Cloud-Trace-Context: abfc5d784eb74e98d328ecc1c33059a5
+X-Country-Code: US
+X-Powered-By: Express
+X-Served-By: cache-mia-kmia1760082-MIA
+X-Timer: S1729339578.924723,VS0,VE230
+
+{"count":1054,"next":"https://pokeapi.co/api/v2/location-area/?offset=20&limit=20","previous":null,"results":[{"name":"canalave-city-area","url":"https://pokeapi.co/api/v2/location-area/1/"},{"name":"eterna-city-area","url":"https://pokeapi.co/api/v2/location-area/2/"},{"name":"pastoria-city-area","url":"https://pokeapi.co/api/v2/location-area/3/"},{"name":"sunyshore-city-area","url":"https://pokeapi.co/api/v2/location-area/4/"},{"name":"sinnoh-pokemon-league-area","url":"https://pokeapi.co/api/v2/location-area/5/"},{"name":"oreburgh-mine-1f","url":"https://pokeapi.co/api/v2/location-area/6/"},{"name":"oreburgh-mine-b1f","url":"https://pokeapi.co/api/v2/location-area/7/"},{"name":"valley-windworks-area","url":"https://pokeapi.co/api/v2/location-area/8/"},{"name":"eterna-forest-area","url":"https://pokeapi.co/api/v2/location-area/9/"},{"name":"fuego-ironworks-area","url":"https://pokeapi.co/api/v2/location-area/10/"},{"name":"mt-coronet-1f-route-207","url":"https://pokeapi.co/api/v2/location-area/11/"},{"name":"mt-coronet-2f","url":"https://pokeapi.co/api/v2/location-area/12/"},{"name":"mt-coronet-3f","url":"https://pokeapi.co/api/v2/location-area/13/"},{"name":"mt-coronet-exterior-snowfall","url":"https://pokeapi.co/api/v2/location-area/14/"},{"name":"mt-coronet-exterior-blizzard","url":"https://pokeapi.co/api/v2/location-area/15/"},{"name":"mt-coronet-4f","url":"https://pokeapi.co/api/v2/location-area/16/"},{"name":"mt-coronet-4f-small-room","url":"https://pokeapi.co/api/v2/location-area/17/"},{"name":"mt-coronet-5f","url":"https://pokeapi.co/api/v2/location-area/18/"},{"name":"mt-coronet-6f","url":"https://pokeapi.co/api/v2/location-area/19/"},{"name":"mt-coronet-1f-from-exterior","url":"https://pokeapi.co/api/v2/location-area/20/"}]}

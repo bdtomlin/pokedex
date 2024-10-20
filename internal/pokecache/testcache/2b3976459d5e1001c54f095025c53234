@@ -1,0 +1,27 @@
+HTTP/2.0 200 OK
+Accept-Ranges: bytes
+Access-Control-Allow-Origin: *
+Age: 26128
+Alt-Svc: h3=":443"; ma=86400
+Cache-Control: public, max-age=86400, s-maxage=86400
+Cf-Cache-Status: HIT
+Cf-Ray: 8d55ba843aef6c33-DFW
+Content-Type: application/json; charset=utf-8
+Date: Sun, 20 Oct 2024 02:55:22 GMT
+Etag: W/"723-qXL1eGM7an8hooSMCFsQSVrg6gk"
+Function-Execution-Id: br9evltxsqu3
+Nel: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+Report-To: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=3v8XbHI%2FL8719dVTOvNG1FM6vlmvda1KQ0VWy8M%2FbEqAWgr0FstmZpCNidVi5PRzO7QIyPQsfwqx9ot1CsfbnTFmybde2qUBS9ermB3pp%2Batlyhc3k85YTei1BgB"}],"group":"cf-nel","max_age":604800}
+Server: cloudflare
+Server-Timing: cfL4;desc="?proto=TCP&rtt=1680&sent=11&recv=11&lost=0&retrans=0&sent_bytes=5587&recv_bytes=1816&delivery_rate=6549068&cwnd=257&unsent_bytes=0&cid=adb55a5e1f968e43&ts=70&x=0"
+Strict-Transport-Security: max-age=31556926
+Vary: Accept-Encoding,cookie,need-authorization, x-fh-requested-host, accept-encoding
+X-Cache: HIT
+X-Cache-Hits: 0
+X-Cloud-Trace-Context: a1d7f4bdccc3542df0e66e6563600cb3
+X-Country-Code: US
+X-Powered-By: Express
+X-Served-By: cache-mia-kmia1760054-MIA
+X-Timer: S1729348991.583534,VS0,VE2
+
+{"count":1054,"next":"https://pokeapi.co/api/v2/location-area?offset=40&limit=20","previous":"https://pokeapi.co/api/v2/location-area?offset=0&limit=20","results":[{"name":"mt-coronet-1f-route-216","url":"https://pokeapi.co/api/v2/location-area/21/"},{"name":"mt-coronet-1f-route-211","url":"https://pokeapi.co/api/v2/location-area/22/"},{"name":"mt-coronet-b1f","url":"https://pokeapi.co/api/v2/location-area/23/"},{"name":"great-marsh-area-1","url":"https://pokeapi.co/api/v2/location-area/24/"},{"name":"great-marsh-area-2","url":"https://pokeapi.co/api/v2/location-area/25/"},{"name":"great-marsh-area-3","url":"https://pokeapi.co/api/v2/location-area/26/"},{"name":"great-marsh-area-4","url":"https://pokeapi.co/api/v2/location-area/27/"},{"name":"great-marsh-area-5","url":"https://pokeapi.co/api/v2/location-area/28/"},{"name":"great-marsh-area-6","url":"https://pokeapi.co/api/v2/location-area/29/"},{"name":"solaceon-ruins-2f","url":"https://pokeapi.co/api/v2/location-area/30/"},{"name":"solaceon-ruins-1f","url":"https://pokeapi.co/api/v2/location-area/31/"},{"name":"solaceon-ruins-b1f-a","url":"https://pokeapi.co/api/v2/location-area/32/"},{"name":"solaceon-ruins-b1f-b","url":"https://pokeapi.co/api/v2/location-area/33/"},{"name":"solaceon-ruins-b1f-c","url":"https://pokeapi.co/api/v2/location-area/34/"},{"name":"solaceon-ruins-b2f-a","url":"https://pokeapi.co/api/v2/location-area/35/"},{"name":"solaceon-ruins-b2f-b","url":"https://pokeapi.co/api/v2/location-area/36/"},{"name":"solaceon-ruins-b2f-c","url":"https://pokeapi.co/api/v2/location-area/37/"},{"name":"solaceon-ruins-b3f-a","url":"https://pokeapi.co/api/v2/location-area/38/"},{"name":"solaceon-ruins-b3f-b","url":"https://pokeapi.co/api/v2/location-area/39/"},{"name":"solaceon-ruins-b3f-c","url":"https://pokeapi.co/api/v2/location-area/40/"}]}

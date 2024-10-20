@@ -2,9 +2,114 @@ package pokeapi
 
 import (
 	"testing"
+
+	"github.com/bdtomlin/pokedexcli/internal/pokecache"
 )
 
-// This has a workaround to test randomness.
-// I would like to look into other options for this.
-func TestCmdCatchSuccess(t *testing.T) {
+func TestGetMap(t *testing.T) {
+	testCache := pokecache.NewTestCache()
+	pApi := NewPokeApi(testCache)
+
+	pMap1, err := pApi.GetMap("")
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+
+	if len(pMap1.Results) != 20 {
+		t.Fatalf("Expected Results to have 20 results")
+	}
+	if pMap1.Previous != "" {
+		t.Fatalf("Expected Previous to be blank")
+	}
+
+	pMap2, err := pApi.GetMap(pMap1.Next)
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+
+	if len(pMap2.Results) != 20 {
+		t.Fatalf("Expected Results to have 20 results")
+	}
+	if pMap2.Previous == "" {
+		t.Fatalf("Expected Previous not to be blank")
+	}
+}
+
+func TestGetLocation(t *testing.T) {
+	testCache := pokecache.NewTestCache()
+	pApi := NewPokeApi(testCache)
+
+	_, err := pApi.GetLocation("")
+	if err == nil {
+		t.Fatalf("Expected an error for a blank location")
+	}
+
+	loc, err := pApi.GetLocation("canalave-city-area")
+	if err != nil {
+		t.Error(err)
+	}
+	if len(loc.PokemonEncounters) == 0 {
+		t.Error("Expected some pokemon encounters")
+	}
+}
+
+func TestGetPokemon(t *testing.T) {
+	testCache := pokecache.NewTestCache()
+	pApi := NewPokeApi(testCache)
+	name := "pikachu"
+
+	_, err := pApi.GetLocation("")
+	if err == nil {
+		t.Fatalf("Expected an error for a blank name")
+	}
+
+	pok, err := pApi.GetPokemon(name)
+	if err != nil {
+		t.Error(err)
+	}
+	if pok.Name != name {
+		t.Fatalf("Want pokemon with name %s, Got: %s", name, pok.Name)
+	}
+}
+
+func TestNormalizeUrlOrPath(t *testing.T) {
+	cases := []struct {
+		input  string
+		output string
+	}{
+		{
+			input:  "abc",
+			output: baseUrl + "/abc",
+		},
+		{
+			input:  baseUrl + "abc",
+			output: baseUrl + "/abc",
+		},
+		{
+			input:  baseUrl + "abc/",
+			output: baseUrl + "/abc",
+		},
+		{
+			input:  baseUrl + "/abc/",
+			output: baseUrl + "/abc",
+		},
+		{
+			input:  baseUrl + "abc/def/xyx",
+			output: baseUrl + "/abc/def/xyx",
+		},
+		{
+			input:  baseUrl,
+			output: baseUrl,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.input, func(t *testing.T) {
+			want := c.output
+			got := normalizeUrlOrPath(c.input)
+			if got != want {
+				t.Fatalf("Want: %s, Got: %s", want, got)
+			}
+		})
+	}
 }

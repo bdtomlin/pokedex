@@ -6,7 +6,7 @@ import (
 )
 
 func cmdInspect(cfg *config, args ...string) error {
-	if len(args) == 0 {
+	if len(args) == 0 || args[0] == "" {
 		return errors.New("A pokemon name is required")
 	}
 	name := args[0]

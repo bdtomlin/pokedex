@@ -6,55 +6,57 @@ import (
 	"time"
 )
 
-func TestAddGet(t *testing.T) {
-	const interval = 5 * time.Second
+func TestCacheGet(t *testing.T) {
 	cases := []struct {
-		key string
-		val []byte
+		url     string
+		isError bool
 	}{
 		{
-			key: "https://test.com",
-			val: []byte("testdata"),
+			url:     "https://pokeapi.co/api/v2/location-area",
+			isError: false,
 		},
 		{
-			key: "https://test.com/path",
-			val: []byte("moretestdata"),
+			url:     "https://pokeapi.co/api/v2/location-area/thisisa404",
+			isError: true,
 		},
 	}
-
-	for i, c := range cases {
-		t.Run(fmt.Sprintf("Test case %v", i), func(t *testing.T) {
+	const interval = 5 * time.Second
+	for _, c := range cases {
+		t.Run(fmt.Sprintf("testing %v", c.url), func(t *testing.T) {
 			cache := NewCache(interval)
-			cache.Add(c.key, c.val)
-			val, ok := cache.Get(c.key)
-			if !ok {
-				t.Errorf("expected to find key")
-				return
+			_, err := cache.Get(c.url)
+			if c.isError && err == nil {
+				t.Fatal("Expected and error")
 			}
-			if string(val) != string(c.val) {
-				t.Errorf("expected to find value")
-				return
+			if !c.isError && err != nil {
+				t.Fatal("Expected no error")
+			}
+			_, ok := cache.GetRaw(c.url)
+			if !ok {
+				t.Fatalf("cache is missing %s", c.url)
 			}
 		})
 	}
 }
 
 func TestReapLoop(t *testing.T) {
+	testUrl := "https://pokeapi.co/api/v2/location-area"
 	const baseTime = 5 * time.Millisecond
 	const waitTime = baseTime + 5*time.Millisecond
 	cache := NewCache(baseTime)
-	cache.Add("https://example.com", []byte("testdata"))
+	cache.Get(testUrl)
 
-	_, ok := cache.Get("https://example.com")
+	_, ok := cache.GetRaw(testUrl)
 	if !ok {
 		t.Errorf("expected to find key")
 		return
 	}
 	time.Sleep(waitTime)
 
-	_, ok = cache.Get("https://example.com")
+	_, ok = cache.GetRaw(testUrl)
 	if ok {
 		t.Errorf("expected to not find key")
 		return
 	}
+	return
 }

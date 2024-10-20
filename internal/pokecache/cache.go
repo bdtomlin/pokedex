@@ -1,7 +1,9 @@
 package pokecache
 
 import (
+	"errors"
 	"fmt"
+	"io"
 	"strings"
 	"sync"
 	"time"
@@ -31,26 +33,49 @@ func NewCache(duration ...time.Duration) *Cache {
 	return nc
 }
 
-func (c *Cache) Add(key string, val []byte) {
+func (c *Cache) Get(url string) ([]byte, error) {
+	defer logResponseTime(time.Now())
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	_, ok := c.entries[key]
-	if !ok {
-		c.entries[key] = cacheEntry{
-			createdAt: time.Now(),
-			val:       val,
+	var rawResponse []byte
+	entry, ok := c.entries[url]
+	if ok {
+		rawResponse = entry.val
+	} else {
+		res, err := rawFromWeb(url)
+		if err != nil {
+			return res, err
 		}
+		rawResponse = res
 	}
+	c.entries[url] = cacheEntry{
+		createdAt: time.Now(),
+		val:       rawResponse,
+	}
+
+	res, err := responseFromRaw(rawResponse)
+	if err != nil {
+		return []byte{}, err
+	}
+	defer res.Body.Close()
+	if res.StatusCode > 399 {
+		return []byte{}, errors.New(res.Status)
+	}
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return body, err
+	}
+	return body, nil
 }
 
-func (c *Cache) Get(key string) ([]byte, bool) {
+func (c *Cache) GetRaw(url string) ([]byte, bool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	entry, ok := c.entries[key]
-	if ok {
-		return entry.val, true
+	entry, ok := c.entries[url]
+	if !ok {
+		return nil, false
 	}
-	return nil, false
+	return entry.val, true
 }
 
 func (c *Cache) Dump() string {

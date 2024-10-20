@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
+	"github.com/bdtomlin/pokedexcli/internal/pokecache"
 )
 
 func TestCmdHelp(t *testing.T) {
@@ -22,7 +23,7 @@ Usage:
 	}
 	applyToSortedCmds(appendSortedCmds)
 
-	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi())
+	cfg := newConfig(os.Stdin, &w, pokeapi.NewPokeApi(pokecache.NewTestCache()))
 	cmdHelp(cfg)
 	got := w.String()
 	if got != want {
