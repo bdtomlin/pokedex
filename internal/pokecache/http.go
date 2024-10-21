@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"net/http"
 	"net/http/httputil"
-	"time"
 )
 
 func rawFromWeb(url string) ([](byte), error) {
@@ -31,7 +30,7 @@ func responseFromRaw(rawResponse []byte) (*http.Response, error) {
 	return res, nil
 }
 
-func logResponseTime(start time.Time) {
-	// end := time.Now()
-	// fmt.Printf("\nResponse time: %v\n", end.Sub(start))
-}
+// func logResponseTime(start time.Time) {
+// end := time.Now()
+// fmt.Printf("\nResponse time: %v\n", end.Sub(start))
+// }

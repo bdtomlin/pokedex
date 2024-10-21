@@ -35,6 +35,16 @@ func TestGetMap(t *testing.T) {
 	}
 }
 
+func TestGetMapErr(t *testing.T) {
+	testCache := pokecache.NewTestCache()
+	pApi := NewPokeApi(testCache)
+
+	_, err := pApi.GetMap("weefkjwekjrfoj")
+	if err == nil {
+		t.Fatalf("expecting an error with invalid input")
+	}
+}
+
 func TestGetLocation(t *testing.T) {
 	testCache := pokecache.NewTestCache()
 	pApi := NewPokeApi(testCache)
@@ -50,6 +60,16 @@ func TestGetLocation(t *testing.T) {
 	}
 	if len(loc.PokemonEncounters) == 0 {
 		t.Error("Expected some pokemon encounters")
+	}
+}
+
+func TestGetLocationErr(t *testing.T) {
+	testCache := pokecache.NewTestCache()
+	pApi := NewPokeApi(testCache)
+
+	_, err := pApi.GetLocation("weefkjwekjrfoj")
+	if err == nil {
+		t.Fatalf("expecting an error with invalid input")
 	}
 }
 
@@ -69,6 +89,38 @@ func TestGetPokemon(t *testing.T) {
 	}
 	if pok.Name != name {
 		t.Fatalf("Want pokemon with name %s, Got: %s", name, pok.Name)
+	}
+}
+
+func TestGetPokemonErr(t *testing.T) {
+	testCache := pokecache.NewTestCache()
+	pApi := NewPokeApi(testCache)
+
+	_, err := pApi.GetPokemon("weefkjwekjrfoj")
+	if err == nil {
+		t.Fatalf("expecting an error with invalid input")
+	}
+}
+
+func TestGetPokemonBlankName(t *testing.T) {
+	testCache := pokecache.NewTestCache()
+	pApi := NewPokeApi(testCache)
+
+	_, err := pApi.GetPokemon("")
+	if err == nil {
+		t.Fatalf("expecting an error with blank input")
+	}
+}
+
+func TestUnmarshal(t *testing.T) {
+	str := struct {
+		Name string `json:name`
+	}{}
+	data := []byte("abc")
+
+	_, err := unmarshal(data, str)
+	if err == nil {
+		t.Fatalf("Expecting an error with invalid json")
 	}
 }
 

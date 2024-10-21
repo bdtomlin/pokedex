@@ -1,0 +1,28 @@
+HTTP/2.0 200 OK
+Accept-Ranges: bytes
+Access-Control-Allow-Origin: *
+Age: 8291
+Alt-Svc: h3=":443"; ma=86400
+Cache-Control: public, max-age=86400, s-maxage=86400
+Cf-Cache-Status: HIT
+Cf-Ray: 8d5db45ccd0ca915-DFW
+Content-Type: application/json; charset=utf-8
+Date: Mon, 21 Oct 2024 02:09:16 GMT
+Etag: W/"1d3-uGDy54bH8vzmt8VzvBcL/pVqsnk"
+Function-Execution-Id: kfwiu7glahhv
+Nel: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+Report-To: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=GnVUikHodtNGcQnExDqh%2BcHGRl3TdKOlGEZxY0SExMW6eK9SkvfTTASrItHNtKLXrhKSayrj1GR0nSnhaACtW0xvVDnlL6ceD%2Br8nxTlmEFLf79IqLvuus1K2H2P"}],"group":"cf-nel","max_age":604800}
+Server: cloudflare
+Server-Timing: cfL4;desc="?proto=TCP&rtt=2578&sent=59&recv=43&lost=0&retrans=0&sent_bytes=33967&recv_bytes=2608&delivery_rate=6671541&cwnd=256&unsent_bytes=0&cid=f9dad58099971fe1&ts=290&x=0"
+Strict-Transport-Security: max-age=31556926
+Vary: Accept-Encoding,cookie,need-authorization, x-fh-requested-host, accept-encoding
+X-Cache: MISS
+X-Cache-Hits: 0
+X-Cloud-Trace-Context: 90ea5ebcd4ad1fb073288e2319b6b8ee
+X-Country-Code: US
+X-Orig-Accept-Language: en-US,en;q=0.5
+X-Powered-By: Express
+X-Served-By: cache-mia-kmia1760061-MIA
+X-Timer: S1729468266.522391,VS0,VE146
+
+{"count":1054,"next":null,"previous":"https://pokeapi.co/api/v2/location-area?offset=1030&limit=20","results":[{"name":"team-rockets-castle-area","url":"https://pokeapi.co/api/v2/location-area/1161/"},{"name":"ultra-megalopolis-area","url":"https://pokeapi.co/api/v2/location-area/1162/"},{"name":"lush-jungle-all-areas","url":"https://pokeapi.co/api/v2/location-area/1163/"},{"name":"alola-route-17-all-areas","url":"https://pokeapi.co/api/v2/location-area/1164/"}]}

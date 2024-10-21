@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"math/rand"
+	"os"
 
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
 )
@@ -26,7 +28,7 @@ type Types []struct {
 
 type config struct {
 	input       io.Reader
-	output      io.Writer
+	output      io.ReadWriter
 	Next        string
 	Previous    string
 	PokeApi     *pokeapi.PokeApi
@@ -34,10 +36,21 @@ type config struct {
 	RandIntFunc func(int) int
 }
 
-func newConfig(input io.Reader, output io.Writer, pokeApi *pokeapi.PokeApi) *config {
+func newConfig(input io.Reader, output io.ReadWriter, pokeApi *pokeapi.PokeApi) *config {
 	return &config{
 		input:       input,
 		output:      output,
+		PokeApi:     pokeApi,
+		Caught:      map[string]pokeapi.Pokemon{},
+		RandIntFunc: randIntFunc,
+	}
+}
+
+func newTestConfig(pokeApi *pokeapi.PokeApi) *config {
+	var w bytes.Buffer
+	return &config{
+		input:       os.Stdin,
+		output:      &w,
 		PokeApi:     pokeApi,
 		Caught:      map[string]pokeapi.Pokemon{},
 		RandIntFunc: randIntFunc,

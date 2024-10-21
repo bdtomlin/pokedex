@@ -20,8 +20,19 @@ func cmdMap(cfg *config, args ...string) error {
 	for _, result := range pMap.Results {
 		fmt.Fprintln(cfg.output, result.Name)
 	}
+
 	fmt.Fprintln(cfg.output)
-	fmt.Fprintln(cfg.output, "Previous", cfg.Previous)
-	fmt.Fprintln(cfg.output, "Next", cfg.Next)
+
+	if cfg.Previous == "" {
+		fmt.Fprintln(cfg.output, "Previous")
+	} else {
+		fmt.Fprintln(cfg.output, "Previous", cfg.Previous)
+	}
+
+	if cfg.Next == "" {
+		fmt.Fprintln(cfg.output, "Next")
+	} else {
+		fmt.Fprintln(cfg.output, "Next", cfg.Next)
+	}
 	return nil
 }

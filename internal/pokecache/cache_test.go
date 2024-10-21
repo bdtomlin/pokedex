@@ -2,6 +2,7 @@ package pokecache
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 )
@@ -36,6 +37,18 @@ func TestCacheGet(t *testing.T) {
 				t.Fatalf("cache is missing %s", c.url)
 			}
 		})
+	}
+}
+
+func TestCacheGetDump(t *testing.T) {
+	url := "https://pokeapi.co/api/v2/location-area"
+	cache := NewCache()
+	_, err := cache.Get(url)
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+	if !strings.Contains(cache.Dump(), url) {
+		t.Fatalf("Expected url to be in cache dump: %s", url)
 	}
 }
 

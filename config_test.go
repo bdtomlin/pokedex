@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"slices"
 	"testing"
 
 	"github.com/bdtomlin/pokedexcli/internal/pokeapi"
@@ -23,5 +24,16 @@ func TestNewConfig(t *testing.T) {
 	}
 	if cfg.Previous != "" {
 		t.Fatalf("Expected Previous to be a blank string")
+	}
+}
+
+func TestRandInt(t *testing.T) {
+	randos := make([]int, 10)
+
+	for i := 0; i < 10; i++ {
+		randos[i] = randIntFunc(10)
+	}
+	if slices.Max(randos) == slices.Min(randos) {
+		t.Fatalf("Expecting random numbers, got: %v", randos)
 	}
 }

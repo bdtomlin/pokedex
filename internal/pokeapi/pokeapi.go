@@ -53,12 +53,7 @@ func (pApi *PokeApi) GetMap(url string) (PokeMap, error) {
 	if err != nil {
 		return pMap, err
 	}
-
-	if err := json.Unmarshal(data, &pMap); err != nil {
-		fmt.Println(string(data))
-		return pMap, fmt.Errorf("Error parsing json %w", err)
-	}
-	return pMap, nil
+	return unmarshal(data, pMap)
 }
 
 func (pApi *PokeApi) GetLocation(area string) (LocationArea, error) {
@@ -74,11 +69,7 @@ func (pApi *PokeApi) GetLocation(area string) (LocationArea, error) {
 		return la, err
 	}
 
-	if err := json.Unmarshal(data, &la); err != nil {
-		fmt.Println(string(data))
-		return la, fmt.Errorf("Error parsing json %w", err)
-	}
-	return la, nil
+	return unmarshal(data, la)
 }
 
 func (pApi *PokeApi) GetPokemon(name string) (Pokemon, error) {
@@ -94,11 +85,15 @@ func (pApi *PokeApi) GetPokemon(name string) (Pokemon, error) {
 		return pok, err
 	}
 
-	if err := json.Unmarshal(data, &pok); err != nil {
-		fmt.Println("data", string(data))
-		return pok, fmt.Errorf("Error parsing json %w", err)
+	return unmarshal(data, pok)
+}
+
+func unmarshal[T any](data []byte, strct T) (T, error) {
+	if err := json.Unmarshal(data, &strct); err != nil {
+		fmt.Println(string(data))
+		return strct, fmt.Errorf("Error parsing json %w", err)
 	}
-	return pok, nil
+	return strct, nil
 }
 
 func normalizeUrlOrPath(url string) string {
